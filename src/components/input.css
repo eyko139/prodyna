@@ -1,0 +1,73 @@
+input {
+    display: inline-block;
+    width: 60%;
+    box-sizing: border-box;
+}
+textarea {
+    display: inline-block;
+    width: 60%;
+    box-sizing: border-box;
+}
+label {
+    display: inline-block;
+    width: 30%;
+    margin-right: 10%;
+}
+label[for=textInput] {
+    position:relative;
+    top: 50%;
+}
+.inputContainer {
+    width: 100%;
+}
+.formContainer {
+    padding: 10px;
+    background-color: rgb(238, 238, 238);
+    border-radius: 10px;
+    width: 80%;
+    margin: auto;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+}
+.formField {
+    width: 90%;
+    margin: 10px;
+    display: flex;
+}
+input[type=checkbox] {
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    margin: 0;
+    cursor: pointer;
+}
+label[for=case] {
+    width: 30%;
+    margin-right: 10%
+}
+.buttonfield{
+    display: flex;
+    justify-content: center;
+
+}
+button {
+    width: 100%;
+    height: 40px;
+    background-color: rgb(42, 121, 42);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+button:hover {
+    background-color: rgb(95, 207, 95);
+}

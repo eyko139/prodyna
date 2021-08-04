@@ -1,0 +1,54 @@
+ul {
+    list-style-type: none;
+}
+
+.resultContainer{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#delete {
+    background-color: red;
+    width: 30%;
+}
+#highlightButton {
+    width: 30%;
+}
+#delete:hover {
+    background-color: rgb(241, 65, 65);
+}
+.resultCard {
+    background-color: rgb(238, 238, 238);
+    width: 90%;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+}
+span {
+    font-weight: 600;
+}
+h3 {
+    margin-top: 0px;
+}
+.highlight {
+    font-weight: 400;
+    transition:all 0.3s
+}
+.highlight.highlighted {
+    color: red;
+}
+.recap {
+    display: flex;
+    margin: 20px 0;
+}
+.searchedLetter {
+    width: 20%;
+}
+.searchedText {
+    width: 70%;
+}
+.buttons {
+    display: flex;
+    justify-content: space-around;
+}

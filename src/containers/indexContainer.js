@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Input from "../components/input";
-import { BrowserRouter,
-  Switch,
-  Route,
-  Link } from "react-router-dom";
 
 function IndexContainer() {
 
   async function postData(url = "", data = {}) {
     const response = await fetch(url, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
@@ -29,10 +25,11 @@ function IndexContainer() {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    postData("/api/input", {
-      text,
-      letter,
-      caseSensitivity,
+    postData("/hello", {
+      apitext: text,
+      apiletter: letter,
+      case_sensitive_search: caseSensitivity,
+      key: Date.now(),
     })
     .then(data => {
       console.log(data);
