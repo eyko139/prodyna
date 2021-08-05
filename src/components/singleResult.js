@@ -7,29 +7,22 @@ function SingleResult(props) {
   useEffect(() => {
     const paragraph = document.getElementById("p"+props.id)
     let newArray = [...paragraph.innerHTML].map(element => {
-        if (element === props.letter) {
-        return "<span class='highlight'>"+element+"</span>"
+        if (props.is_case_sensitive === true) {
+            if (element === props.letter) {
+                return "<span class='highlight'>"+element+"</span>"
+            }
+            return element;
         }
-        return element
-    })
+        if (props.is_case_sensitive === false) {
+            if (element.toLowerCase() === props.letter.toLowerCase()) {
+                return "<span class='highlight'>"+element+"</span>"
+            }
+            return element
+            }
+        })
     paragraph.innerHTML = newArray.join("")
-    // const hightlight = (paragraphToHighlight, letter) => {
-    //     const paragraph = document.getElementById("p"+paragraphToHighlight)
-
-    //     if (!paragraph.classList.contains("highlighted")) {
-    //     let newArray = [...paragraph.innerHTML].map(element => {
-    //         if (element === letter) {
-    //         return "<span class='highlight'>"+element+"</span>"
-    //         }
-    //         return element
-    //     })
-    //     paragraph.innerHTML = newArray.join("")
-    //     } else paragraph.innerHTML = props.text
-
-    //     paragraph.classList.toggle("highlighted")
-
-    // }
     }, [])
+
     const hightlight = (id) => {
         const lettersToHighLight = document.getElementById("p"+id).querySelectorAll(".highlight")
         for (let i=0; i < lettersToHighLight.length; i++) {

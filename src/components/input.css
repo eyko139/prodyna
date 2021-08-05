@@ -2,11 +2,30 @@ input {
     display: inline-block;
     width: 60%;
     box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 2rem;
+    padding: 12px 20px;
+}
+input:invalid {
+    box-shadow: 0 0 5px 1px red;
+}
+input:active{
+    box-shadow: 0 0 5px 1px rgb(104, 154, 235);
+    border: none;
+}
+input:focus-visible, textarea:focus-visible {
+    box-shadow: 0 0 5px 1px rgb(104, 154, 235);
+    outline: none;
+    border: 1px solid #ccc;
 }
 textarea {
     display: inline-block;
     width: 60%;
     box-sizing: border-box;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+    padding: 12px 20px;
 }
 label {
     display: inline-block;
@@ -19,6 +38,7 @@ label[for=textInput] {
 }
 .inputContainer {
     width: 100%;
+    height: 500px;
 }
 .formContainer {
     padding: 10px;
@@ -26,6 +46,7 @@ label[for=textInput] {
     border-radius: 10px;
     width: 80%;
     margin: auto;
+    height: 100%;
 }
 form {
     display: flex;
@@ -33,6 +54,7 @@ form {
     align-items: center;
     justify-content: center;
     padding: 20px;
+    height: 100%;
 }
 h1 {
     text-align: center;
@@ -41,6 +63,10 @@ h1 {
     width: 90%;
     margin: 10px;
     display: flex;
+    height: 20%;
+}
+.formField.letter {
+    height: 10%;
 }
 input[type=checkbox] {
     width: 30px;
