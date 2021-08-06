@@ -2,7 +2,9 @@ from flask import Flask, request, redirect
 import json
 from flask_restful import Api, Resource, reqparse
 
-app = Flask(__name__, static_folder="../public/", template_folder="../public")
+#Relocate static folder to react build 
+#static url without "/static" prefix
+app = Flask(__name__, static_folder="../build", static_url_path="/")
 api = Api(app)
 
 #Defining the arguments for PUT requests
@@ -68,3 +70,11 @@ class Resultapi(Resource):
          
 
 api.add_resource(Resultapi, "/api")
+
+@app.route("/")
+def index():
+    return app.send_static_file("index.html")
+
+@app.route("/result")
+def result():
+    return app.send_static_file("index.html")
