@@ -1,84 +1,94 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Input from "../components/input";
-import { BrowserRouter,
-  Switch,
-  Route,
-  Link } from "react-router-dom";
+import validate from "./validateInput";
+import useFirstRender from "./validationHook";
 
 function IndexContainer() {
 
+  //User Input
+  const [values, setValues] = useState({
+    text: "",
+    letter: "",
+    caseSensitivity: false
+  })
+
+  //Form validation errors
+  const [validationErrors, setValidationErrors] = useState("");
+
+
+  //custom hook returns true for first render, false for every subsequent render
+  let firstRender = useFirstRender()
+  useEffect(() => {
+    if (!firstRender || validationErrors) {
+      setValidationErrors(validate(values))
+      console.log(validationErrors)
+    }
+  },[firstRender, values])
+
+
+  const handleChange = ({ target }) => {
+    const { name, value } = target
+    if (target.name === "text" || target.name === "letter") {
+      setValues({
+        ...values,
+        [name]: value
+      })
+    }
+    else {
+      target.checked ? setValues({...values, caseSensitivity: true}) : setValues({...values, caseSensitivity: false})
+    }
+  };
+
   async function postData(url = "", data = {}) {
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => {
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
       if (response.ok) {
-        return response.json()
-      }
+          const jsonResponse = await response.json()
+          return jsonResponse;
+        }
       throw new Error("Request failed!")
-    }, networkError => console.log(networkError.message))
-    return response;
-    //Insert a render response function?
+    }
+    catch(netWorkError) {
+      console.log(netWorkError)
+    }
   }
 
-  const [result, setResult] = useState("");
-
+  //Form submission:
+  //Checks for errors and runs validation check in case there was no input
   const handleSubmit = (event) => {
     event.preventDefault()
-    postData("/hello", {
-      apitext: text,
-      apiletter: letter,
-      case_sensitive_search: caseSensitivity,
-      // key: Date.now(),
+
+    if (Object.keys(validationErrors).length !== 0 || values.letter == "") {
+      setValidationErrors(validate(values))
+      return
+    }
+    postData("/api", {
+      apitext: values.text,
+      apiletter: values.letter,
+      case_sensitive_search: values.caseSensitivity,
+      key: Date.now(),
     })
     .then(data => {
-      console.log(data);
-      setResult(data.occurances)
       window.location.href = data.url;
     });
     
   }
-  //Reset caseSensitivity Checkbox with initial render
-  useEffect(() => {
-    setCaseSensitivity(false)
-  }, [])
 
-  const [caseSensitivity, setCaseSensitivity] = useState(false);
-  const handleCase = ({ target }) => {
-        caseSensitivity ? setCaseSensitivity(false) : setCaseSensitivity(true);
-    }
-
-  const [text, setText] = useState("")
-  const handleTextChange = ({ target }) => {
-    setText(target.value);
-  }
-
-  const [letter, setLetter] = useState("")
-  const handleLetterChange = ({ target }) => {
-    setLetter(target.value)
-  }
-
-  // useEffect(() => {
-  //     console.log(caseSensitivity);
-  // }, [caseSensitivity])
-  // useEffect(() => {
-  //     console.log(text)
-  // }, [text, letter])
   
   return (
       <Input
-        handleTextChange={handleTextChange}
-        handleLetterChange={handleLetterChange}
-        handleCaseChange={handleCase}
         handleSubmit={handleSubmit}
-        caseSensitivity={caseSensitivity}
-        text={text}
-        letter={letter}
-        caseSensitivity={caseSensitivity}
+        caseSensitivity={values.caseSensitivity}
+        text={values.text}
+        letter={values.letter}
+        handleChange={handleChange}
+        errors={validationErrors}
       />
   )
 }
