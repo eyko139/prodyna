@@ -5,7 +5,6 @@ from flask_restful import Api, Resource, reqparse
 
 app = Flask(__name__, static_folder="../public/", template_folder="../public")
 api = Api(app)
-CORS(app)
 
 #Defining the arguments for PUT requests
 resultapi_put_args = reqparse.RequestParser()
@@ -18,11 +17,10 @@ resultapi_put_args.add_argument("key", type=int, required=True)
 resultapi_del_args = reqparse.RequestParser()
 resultapi_del_args.add_argument("id", type=int, required=True)
 
-
+#Storing results
 results = []
 
 #Calculating the how many times a letter occures in the text
-
 def calc_letter_occurances(text, input_letter, case_sensitive = False):
 
     count = 0
@@ -70,4 +68,4 @@ class Resultapi(Resource):
         return "hello"
          
 
-api.add_resource(Resultapi, "/hello")
+api.add_resource(Resultapi, "/api")

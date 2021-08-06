@@ -6,28 +6,30 @@ function ResultContainer() {
     const [results, setResults] = useState([])
     const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
-        const fetchResults = async() => {
-            setLoading(true)
-            const response = await fetch("/hello", {
-              method: "GET"
+    const fetchResults = async() => {
+        setLoading(true)
+        try {
+            const response = await fetch("/api", {
+                method: "GET"
             })
-            .then(response => {
-               if (response.ok) {
-                    return response.json()}
-               })
-            .then(response => {
-                console.log(response);
-                return response
-            })
-            setResults(response)
+            if (response.ok) {
+                const jsonResponse = await response.json()
+                return jsonResponse
+            }
+            throw new Error("Request failed!")
         }
-        fetchResults();
+        catch(Error) {
+            console.log(Error)
+        }
+    }
+
+    useEffect(() => {
+        fetchResults().then(data => setResults(data))
+        setLoading(false)
     }, [])
-    console.log(results)
 
     const deleteResultApi = async(keyToRemove) => {
-        const response = await fetch("/hello", {
+        const response = await fetch("/api", {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
@@ -42,12 +44,7 @@ function ResultContainer() {
     }
     return ( 
         <div>
-            {/* <Result
-              results={results}
-              deleteResult={deleteResult}
-            /> */}
-
-            { results.map((result, index) => (
+            { loading ? " Loading..." : results.map((result, index) => (
                 <SingleResult 
                     letter={result.letter}
                     text={result.text}

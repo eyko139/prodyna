@@ -2,9 +2,8 @@ import React, { useEffect } from "react"
 
 
 function SingleResult(props) {
-  const isLoading = props.letter ? true : false;
 
-  useEffect(() => {
+  const highlightResults = () => {
     const paragraph = document.getElementById("p"+props.id)
     let newArray = [...paragraph.innerHTML].map(element => {
         if (props.is_case_sensitive === true) {
@@ -12,26 +11,30 @@ function SingleResult(props) {
                 return "<span class='highlight'>"+element+"</span>"
             }
             return element;
-        }
+        };
         if (props.is_case_sensitive === false) {
             if (element.toLowerCase() === props.letter.toLowerCase()) {
                 return "<span class='highlight'>"+element+"</span>"
             }
             return element
             }
-        })
+        });
     paragraph.innerHTML = newArray.join("")
-    }, [])
+  };
+
+    useEffect(() => {
+        highlightResults();
+    });
 
     const hightlight = (id) => {
         const lettersToHighLight = document.getElementById("p"+id).querySelectorAll(".highlight")
         for (let i=0; i < lettersToHighLight.length; i++) {
             lettersToHighLight.item(i).classList.toggle("highlighted")
         }
-    }
+    };
     return (
         <div className="resultContainer">
-            <h1>{isLoading ? "Results:": "loading"}</h1>
+            <h1>Results: </h1>
                 <div className="resultCard" id={props.id}>
                   <h3>Result: {props.letterOccurances} ({props.is_case_sensitive ? "case sensitive" : "not case sensitive"})</h3>
                 <div className="recap">
@@ -51,6 +54,6 @@ function SingleResult(props) {
                 </div>
         </div>
     )
-}
+};
 
 export default SingleResult;
