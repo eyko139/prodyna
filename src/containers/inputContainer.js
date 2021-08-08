@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../components/inputForm";
 import validate from "./validateInput";
 import useFirstRender from "./validationHook";
@@ -19,19 +19,18 @@ function IndexContainer() {
   let firstRender = useFirstRender()
   useEffect(() => {
     if (!firstRender || validationErrors) {
-      setValidationErrors(validate(values))
-      console.log(validationErrors)
+      setValidationErrors(validate(values));
     }
   },[firstRender, values])
 
   //Sets the corresponding values for all input forms 
   const handleChange = ({ target }) => {
-    const { name, value } = target
+    const { name, value } = target;
     if (target.name === "text" || target.name === "letter") {
       setValues({
         ...values,
         [name]: value
-      })
+      });
     }
     else {
       target.checked ? setValues({...values, caseSensitivity: true}) : setValues({...values, caseSensitivity: false})
@@ -64,7 +63,7 @@ function IndexContainer() {
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    if (Object.keys(validationErrors).length !== 0 || values.letter == "") {
+    if (Object.keys(validationErrors).length !== 0 || values.letter === "") {
       setValidationErrors(validate(values))
       return
     }

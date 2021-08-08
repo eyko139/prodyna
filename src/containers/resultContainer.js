@@ -37,7 +37,7 @@ function ResultContainer() {
     }, [])
 
     const deleteResultApi = async(keyToRemove) => {
-        const response = await fetch("/api", {
+        await fetch("/api", {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
@@ -47,27 +47,27 @@ function ResultContainer() {
     }
 
     const deleteResult = (index, keyToRemove) => {
-        setResults(results.filter(result => result.id != keyToRemove))
+        setResults(results.filter(result => result.id !== keyToRemove))
         deleteResultApi(index)
     }
     return ( 
         <div className="resultCardContainer">
             <h1>Result: </h1>
-          <ul>
-            { loading ? " Loading..." : results.map((result, index) => (
-              <li>
-                <SingleResult 
-                    letter={result.letter}
-                    text={result.text}
-                    id={result.id}
-                    letterOccurances={result.letter_occurances}
-                    is_case_sensitive={result.is_case_sensitive}
-                    index={index}
-                    deleteResult={deleteResult}
-                />
-              </li>
-            ))}
-          </ul>
+            <ul>
+                { loading ? " Loading..." : results.map((result, index) => (
+                <li key={result.id}>
+                    <SingleResult 
+                        letter={result.letter}
+                        text={result.text}
+                        id={result.id}
+                        letterOccurances={result.letter_occurances}
+                        is_case_sensitive={result.is_case_sensitive}
+                        index={index}
+                        deleteResult={deleteResult}
+                    />
+                </li>
+                ))}
+            </ul>
         </div>
     )
 }

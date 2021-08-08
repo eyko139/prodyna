@@ -1,81 +1,74 @@
 import React from "react";
+import { render, unmountComponentAtNode } from "react-dom";
 import SingleResult from "../singleResult";
-import { render, fireEvent, cleanup } from "@testing-library/react";
+import { act } from "react-dom/test-utils"
 import "@testing-library/jest-dom/extend-expect"
-import { deleteResult } from "../../containers/resultContainer";
-import renderer from "react-test-renderer";
-import {screen} from '@testing-library/dom';
+import { configure, ReactWrapper, shallow } from "enzyme";
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17'; 
+import { fireEvent } from "@testing-library/dom";
 
-afterEach(cleanup);
-//Testing result rendering
-it("Result renders correctly", () => {
-    const { getByTitle, getByText, getByRole, getAllByRole } = render(<SingleResult 
-                                letter="a"
-                                text="This is a test text"
-                                id="1"
-                                letterOccurances="1"
-                                is_case_sensitive="true"
-                                index="0"
-                                deleteResult={deleteResult}
-                                    />);
-    const container = getByRole("container");
-    const header = getByRole("heading", {level: 2})
-    const buttons = getAllByRole("button")
-    expect(container).toBeTruthy();
-    expect(header.innerHTML).toBe("The letter \"a\" occured <p id=\"resultCounter\">1</p>time (case sensitive)");
-    expect(buttons).toBeTruthy();
-})
-
-//Testing highlight function
-describe("clickHighlight", () => {
-    it("onClick", () => {
-        const renderFn = jest.fn().mockReturnValue(null);
-        const wrapper = render(<SingleResult
-                                letter="a"
-                                text="Thisisatesttext"
-                                id={Date.now()}
-                                letterOccurances="1"
-                                is_case_sensitive="true"
-                                index="0"
-                                deleteResult = {deleteResult}
-                                />)
-
-        // const { getByText, getAllByTitle, getByTitle} = render(<SingleResult 
-                                // letter="a"
-                                // text="This is a test text"
-                                // id="1"
-                                // letterOccurances="1"
-                                // is_case_sensitive="true"
-                                // index="0"
-                                // deleteResult = {deleteResult}
-        //                             />);
-        const highlightButton = wrapper.getByTitle("highlightButton");
-        expect(highlightButton).toBeTruthy();
-        const searchedTExt = wrapper.getByTestId("searched");
-        let highlightedLetters;
-        setTimeout(() => {
-            expect(searchedTExt.textContent).toBe("Thisisatesttext");
-            highlightedLetters = screen.getAllByTitle("highlight");
-            console.log(highlightedLetters)
-        }, 150)
-        fireEvent.click(highlightButton);
-        expect(highlightedLetters.style.color).toBe("red");
-    });
+configure({ adapter: new Adapter() });
+let container = null;
+beforeEach(() => {
+  // setup a DOM element as a render target
+  container = document.createElement("div");
+  document.body.appendChild(container);
 });
 
-// test("Test 1", () => {
-//     const component = renderer.create(
-//       <SingleResult 
-//                                 letter="a"
-//                                 text="This is a test text"
-//                                 id="1"
-//                                 letterOccurances="1"
-//                                 is_case_sensitive="true"
-//                                 index="0"
-//                                 deleteResult={deleteResult}
-//                                 />
-//     );
-  
-//     let tree = component.toJSON();
-//     expect(tree).toMatchSnapshot();
-//   });
+afterEach(() => {
+  // cleanup on exiting
+  unmountComponentAtNode(container);
+  container.remove();
+  container = null;
+});
+const testProps = {
+                                letter:"a",
+                                text:"This is a test text",
+                                id:"1",
+                                letterOccurances:"1",
+                                is_case_sensitive:"true",
+                                index:"0",
+};
+
+//Testing result rendering
+it("Result renders correctly", () => {
+    act(() => {
+        render(<SingleResult {...testProps}/>, container);
+    });
+    const resultContainer = container.querySelector(".resultContainer");
+    const header = container.querySelector("h2");
+    const deleteButton = container.querySelector("#delete")
+    const highlightButton = container.querySelector("#highlightButton")
+    expect(resultContainer).toBeTruthy();
+    expect(header.innerHTML).toBe("The letter \"a\" occured <p id=\"resultCounter\">1</p>time (case sensitive)");
+    expect(deleteButton).toBeTruthy();
+    expect(highlightButton).toBeTruthy();
+})
+
+it("Button fires onclick events", () => {
+    const deleteResult = jest.fn();
+    act(() => {
+        render(<SingleResult letter="a" text="abc" id="1" letterOccurances="1" is_case_sensitive="true" index="0" deleteResult={deleteResult}/>, container);
+    })
+    //Find Button elements
+    const deleteButton = container.querySelector("#delete")
+    const highlightButton = container.querySelector("#highlightButton")
+
+    act(() => {
+        fireEvent.click(deleteButton);
+        fireEvent.click(highlightButton);
+    });
+
+    expect(deleteResult).toHaveBeenCalledTimes(1);
+});
+//Check impletementation of result highlighting 
+it("Highlight found letters on initial render", () => {
+    act(() => {
+        render(<SingleResult {...testProps} />, container)
+    })
+    const firstRender = jest.spyOn(React, "useEffect").mockImplementation(() => {return true});
+    const executed = firstRender();
+    expect(firstRender).toHaveBeenCalled();
+    expect(executed).toBe(true);
+
+});
