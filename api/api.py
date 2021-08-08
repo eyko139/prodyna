@@ -1,9 +1,10 @@
 from flask import Flask, request, redirect
-from flask_cors import CORS, cross_origin
 import json
 from flask_restful import Api, Resource, reqparse
 
-app = Flask(__name__, static_folder="../public/", template_folder="../public")
+#Relocate static folder to react build 
+#static url without "/static" prefix
+app = Flask(__name__, static_folder="../build", static_url_path="/")
 api = Api(app)
 
 #Defining the arguments for PUT requests
@@ -41,7 +42,7 @@ def calc_letter_occurances(text, input_letter, case_sensitive = False):
 class Resultapi(Resource):
 
     def get(self):
-        return results
+        return results, 200
 
     def put(self):
         args = resultapi_put_args.parse_args()
@@ -65,7 +66,15 @@ class Resultapi(Resource):
     def delete(self):
         args = resultapi_del_args.parse_args()
         del results[args["id"]]
-        return "hello"
+        return 200
          
 
 api.add_resource(Resultapi, "/api")
+
+@app.route("/")
+def index():
+    return app.send_static_file("index.html")
+
+@app.route("/result")
+def result():
+    return app.send_static_file("index.html")

@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import { BrowserRouter,
   Switch,
-  Route,
-  Link } from "react-router-dom";
+  Route } from "react-router-dom";
 
-import IndexContainer from "./containers/indexContainer";
+import InputContainer from "./containers/inputContainer";
 import ResultContainer from "./containers/resultContainer";
 
 function App() {
@@ -13,7 +12,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Switch>
-          <Route exact path="/" component={IndexContainer}>
+          <Route exact path="/" component={InputContainer}>
         </Route>
         <Route exact path="/result" component={ResultContainer}>
           </Route>
@@ -21,6 +20,6 @@ function App() {
       </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;

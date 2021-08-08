@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 
-import Result from "../components/result.js"
 import SingleResult from "../components/singleResult.js"
 function ResultContainer() {
     const [results, setResults] = useState([])
@@ -19,13 +18,22 @@ function ResultContainer() {
             throw new Error("Request failed!")
         }
         catch(Error) {
-            console.log(Error)
+            console.log(Error);
         }
     }
 
     useEffect(() => {
-        fetchResults().then(data => setResults(data))
-        setLoading(false)
+        fetchResults().then(data => setResults(data));
+        setLoading(false);
+        setTimeout(() => {
+            const firstResult = document.querySelectorAll("ul > li");
+            try {
+                firstResult[0].insertAdjacentHTML("afterend", "<h4>Old results:</h2>")
+            }
+            catch(Error) {
+                console.log(Error);
+            }
+        }, 150);
     }, [])
 
     const deleteResultApi = async(keyToRemove) => {
@@ -43,8 +51,11 @@ function ResultContainer() {
         deleteResultApi(index)
     }
     return ( 
-        <div>
+        <div className="resultCardContainer">
+            <h1>Result: </h1>
+          <ul>
             { loading ? " Loading..." : results.map((result, index) => (
+              <li>
                 <SingleResult 
                     letter={result.letter}
                     text={result.text}
@@ -54,7 +65,9 @@ function ResultContainer() {
                     index={index}
                     deleteResult={deleteResult}
                 />
+              </li>
             ))}
+          </ul>
         </div>
     )
 }
