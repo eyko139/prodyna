@@ -40,7 +40,7 @@ it("Result renders correctly", () => {
     const deleteButton = container.querySelector("#delete")
     const highlightButton = container.querySelector("#highlightButton")
     expect(resultContainer).toBeTruthy();
-    expect(header.innerHTML).toBe("The letter \"a\" occured <p id=\"resultCounter\">1</p>time (case sensitive)");
+    expect(header.innerHTML).toBe("The letter \"a\" occured <p id=\"resultCounter\">1</p>times (case sensitive)");
     expect(deleteButton).toBeTruthy();
     expect(highlightButton).toBeTruthy();
 })

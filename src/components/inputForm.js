@@ -4,7 +4,7 @@ function InputForm(props) {
     const {handleSubmit, text, letter, caseSensitivity, handleChange, errors} = props;
 
     return (
-        <div className="inputContainer" role="container" aria-label="container">
+        <div className="inputContainer" >
             <h1>Input data below</h1>
             <div className="formContainer">
                 <form method="" onSubmit={handleSubmit}>

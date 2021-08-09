@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 
-import SingleResult from "../components/singleResult.js"
+import SingleResult from "../components/singleResult.js";
 function ResultContainer() {
-    const [results, setResults] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [results, setResults] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const fetchResults = async() => {
         setLoading(true)
         try {
             const response = await fetch("/api", {
                 method: "GET"
-            })
+            });
             if (response.ok) {
-                const jsonResponse = await response.json()
+                const jsonResponse = await response.json();
                 return jsonResponse
             }
-            throw new Error("Request failed!")
+            throw new Error("Request failed!");
         }
         catch(Error) {
             console.log(Error);
         }
-    }
+    };
 
     useEffect(() => {
         fetchResults().then(data => setResults(data));
@@ -44,12 +44,12 @@ function ResultContainer() {
             },
             body: JSON.stringify({id: keyToRemove})
         })
-    }
+    };
 
     const deleteResult = (index, keyToRemove) => {
-        setResults(results.filter(result => result.id !== keyToRemove))
-        deleteResultApi(index)
-    }
+        setResults(results.filter(result => result.id !== keyToRemove));
+        deleteResultApi(index);
+    };
     return ( 
         <div className="resultCardContainer">
             <h1>Result: </h1>
@@ -70,5 +70,5 @@ function ResultContainer() {
             </ul>
         </div>
     )
-}
+};
 export default ResultContainer;

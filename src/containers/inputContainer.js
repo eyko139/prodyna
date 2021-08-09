@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Input from "../components/inputForm";
+import InputForm from "../components/inputForm";
 import validate from "./validateInput";
 import useFirstRender from "./validationHook";
 
@@ -18,7 +18,7 @@ function IndexContainer() {
   //custom hook returns true for first render, false for every subsequent render
   let firstRender = useFirstRender()
   useEffect(() => {
-    if (!firstRender || validationErrors) {
+    if (!firstRender) {
       setValidationErrors(validate(values));
     }
   },[firstRender, values])
@@ -61,10 +61,10 @@ function IndexContainer() {
   //Form submission:
   //Checks for errors and runs validation check in case there was no input
   const handleSubmit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     if (Object.keys(validationErrors).length !== 0 || values.letter === "") {
-      setValidationErrors(validate(values))
+      setValidationErrors(validate(values));
       return
     }
     postData("/api", {
@@ -76,13 +76,12 @@ function IndexContainer() {
     .then(data => {
       window.location.href = data.url;
     });
-    
-  }
+  };
 
   
   return (
     <div data-testid="inputForm">
-      <Input
+      <InputForm
         handleSubmit={handleSubmit}
         caseSensitivity={values.caseSensitivity}
         text={values.text}
